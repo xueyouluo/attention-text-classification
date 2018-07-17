@@ -1,0 +1,12 @@
+python -m bin.train_attention_clf \
+--vocab_file=/data/xueyou/clf/cail2018/vocab.100000.0712.txt \
+--train_data_file=/data/xueyou/clf/cail2018/test.json \
+--eval_data_file=/data/xueyou/clf/cail2018/test.json \
+--noam_decay=True \
+--learning_rate=1.0 \
+--warmup_steps=500 \
+--steps_per_eval=2000 \
+--label_file=/data/xueyou/clf/cail2018/accu.txt \
+--label_type=multi-label \
+--batch_size=50 \
+--checkpoint_dir=/data/xueyou/clf/cail2018/test_attention_clf
