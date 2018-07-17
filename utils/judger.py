@@ -10,7 +10,7 @@ class Judger:
         f = open(label_path, "r")
         self.task_cnt = 0
         for line in f:
-            self.label_dic[line[:-1]] = self.task_cnt
+            self.label_dic[line.strip()] = self.task_cnt
             self.task_cnt += 1
 
     # Gen new results according to the truth and users output
@@ -21,8 +21,8 @@ class Judger:
             s2.add(self.label_dic[name])
 
         for a in range(0, self.task_cnt):
-            in1 = (a + 1) in s1
-            in2 = (a + 1) in s2
+            in1 = a in s1
+            in2 = a in s2
             if in1:
                 if in2:
                     result[a]["TP"] += 1

@@ -69,7 +69,10 @@ def eval_for_train(eval_model, eval_sess, eval_data):
         eval_acc += accurary
         batch_num += batch_size
     
-    macro_f1, micro_f1 = jd.evaluation(flags.eval_data_file, predicts)
+    predict_labels = []
+    for p in predicts:
+        predict_labels.append(np.where(p>0)[0])
+    macro_f1, micro_f1 = jd.evaluation(flags.eval_data_file, predict_labels)
     accurary = eval_acc / batch_num
     return accurary,micro_f1, macro_f1
 
@@ -134,6 +137,19 @@ def train(flags):
 
     global_step = train_sess.run(train_model.global_step)
     best_acc = -1000000
+
+    try:
+        eval_model.restore_model(eval_sess)
+        print("# Eval from previous best model")
+        acc, micro_f1, macro_f1 = eval_for_train(eval_model, eval_sess, eval_data)
+        score = (macro_f1 + micro_f1) / 2
+        print("##########")
+        print("# micro f1 {0}, macro f1 {1}, best score {2}".format(micro_f1,macro_f1,score))
+        print("##########")
+        best_acc = score
+    except:
+        pass
+
     for epoch in range(flags.num_train_epoch):
         checkpoint_total_loss,step_time, checkpoint_loss, iters, checkpoint_acc,batch_num = 0.0,0.0, 0.0, 0,0.0, 0
         for i,(sources,lengths,labels) in enumerate(train_data.get_next(shuffle=True)):

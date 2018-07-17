@@ -139,8 +139,9 @@ class AttentionClassification(object):
                 else:
                     condition = tf.greater_equal(self.label_predict, 0.5)
                     predict = tf.where(condition,tf.ones_like(self.target_labels),tf.zeros_like(self.target_labels))
-                self.predict = predict
                 self.accurary = tf.reduce_sum(tf.cast(tf.reduce_all(tf.equal(predict,self.target_labels),axis=1),tf.float32))
+            self.predict = predict
+            
 
     def setup_loss(self):
         with tf.name_scope("losses") as scope:
