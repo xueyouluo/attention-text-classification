@@ -127,7 +127,6 @@ class AttentionClassification(object):
             if self.hparams.label_type == 'multi-class':
                 self.label_predict = self.label_outputs
             elif self.hparams.label_type == 'multi-label':
-                print('multi-label')
                 self.label_predict = tf.sigmoid(self.label_outputs)
             else:
                 raise ValueError("label type %s not supported" % self.hparams.label_type)
